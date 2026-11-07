@@ -66,10 +66,30 @@ main:
     MOVZ X21, #0
 
     LOOP:
-    // Kiểm tra nếu con chay X20 lớn hơn hoặc bằng input thì dừng
-    // để kiểm tra kết quả
+    // Dừng khi con chạy X20 >= n, rồi so sánh tổng ước
     CMP X20, X19
     B.GE CHECK_RESULT
+
+    // X22 = n, trừ dần cho X20 để lấy phần dư
+    MOV X22, X19
+
+SUB_LOOP:
+    CMP X22, X20
+    B.LT CHECK_DIV
+    SUB X22, X22, X20
+    B SUB_LOOP
+
+CHECK_DIV:
+    // Dư khác 0 thì X20 không phải ước
+    CMP X22, #0
+    B.NE NEXT_I
+
+    // Dư = 0 thì cộng ước vào sum (X21)
+    ADD X21, X21, X20
+
+NEXT_I:
+    ADD X20, X20, #1
+    B LOOP
 
 INVALID_INPUT:
     ADRP X0, tb4
@@ -78,12 +98,10 @@ INVALID_INPUT:
     B EXIT
 
 CHECK_RESULT:
-    // Nếu sum = input => là số hoàn thiện
-    // ngược lại không phải
-    CMP X22, X19
+    // sum = n thì là số hoàn thiện
+    CMP X21, X19
     B.EQ PERFECT
-
-    NOT_PERFECT
+    B NOT_PERFECT
 
 NOT_PERFECT:
     ADRP X0, tb3

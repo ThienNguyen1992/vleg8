@@ -21,8 +21,8 @@
 // Vùng data khai báo thông báo với  format số integer
 .section .data
     tb1: .asciz "Please enter number n:\n"
-    tb2: .asciz "Yes"
-    tb3: .asciz "No"
+    tb2: .asciz "Yes \n"
+    tb3: .asciz "No \n"
     tb4: .asciz "Invalid Number \n"
     fmt_in: .asciz "%ld"
 
@@ -108,7 +108,7 @@ GO_NEXT:
     B.EQ NOT_PRIME
 
     // không phải thì cộng thêm 1
-    ADDI X20, X20, #1
+    ADD X20, X20, #1
     B CHECK_PRIME
 
 // in thông báo là số không hợp lệ

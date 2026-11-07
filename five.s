@@ -21,6 +21,9 @@
     // 1.
     tb3: .asciz "\n ========================= 1. Print Array =======================\n"
     tb4: .asciz "%ld"
+    tb4a: .asciz "["
+    tb4b: .asciz ","
+    tb4c: .asciz "]\n"
     tb5: .asciz "\n"
 
     // 2.
@@ -169,6 +172,15 @@ main:
             CMP X19, X21
             B.GE DONE_OUT
 
+            // Phần tử đầu không có dấu phẩy
+            CMP X19, #0
+            B.EQ PRINT_NUM
+
+            ADRP X0, tb4b
+            ADD X0, X0, :lo12:tb4b
+            BL printf
+
+        PRINT_NUM:
             // Đọc arr[i]
             LDUR X1, [X20, #0]
 
@@ -186,8 +198,8 @@ main:
             B LOOP_OUT
 
 DONE_OUT:
-    ADRP X0, tb5
-    ADD X0, X0, :lo12:tb5
+    ADRP X0, tb4c
+    ADD X0, X0, :lo12:tb4c
     BL printf
 
     B PRIME_SECTION
@@ -304,6 +316,10 @@ DONE:
     MOVZ X19, #0
     ADRP X20, arr
     ADD X20, X20, :lo12:arr
+
+    ADRP X0, tb4a
+    ADD X0, X0, :lo12:tb4a
+    BL printf
     B LOOP_OUT
 
 ARRAY_ERROR:
